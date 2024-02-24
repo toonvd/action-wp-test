@@ -35,7 +35,7 @@ jobs:
               ./wp-cli.phar core download --path=. --locale=en_US
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
       - name: Start PHP webserver
-        run:  nohup php -S localhost:8000 &> /dev/null &
+        run:  nohup php -S 127.0.0.1 &> /dev/null &
       - name: check dir
         run: ls
       - name: Test Curl
