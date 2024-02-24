@@ -23,17 +23,17 @@ jobs:
           php-version: '8.2'
           extensions: pdo
       - name: Install MySQL
-        uses: shogo82148/actions-setup-mysql@79d1a1da69568b6eaf8895d35e877a633f01fc5b
-        with:
-          mysql-version: "8.0"
-      - name: Create Wordpress DB
-        run: mysql -uroot -e "CREATE DATABASE wordpress;"
+        uses: mirromutth/mysql-action@700bd5614a765a62bc6e286fce84ac7bf08606d7
+          with:
+            mysql version: '8.0'
+            mysql database: 'wordpress'
+            mysql root password: ''
       - name: Install Wordpress
         run: |
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
-              ./wp-cli.phar config create --dbhost="localhost" --dbname="wordpress" --dbuser="root" --dbpass=""
+              ./wp-cli.phar config create --dbhost='localhost' --dbname='wordpress' --dbuser='root' --dbpass=''
       - name: Start PHP webserver
         run: php -S localhost:8000
       - name: Test Curl
