@@ -25,7 +25,7 @@ jobs:
       - name: Install MySQL
         uses: mirromutth/mysql-action@700bd5614a765a62bc6e286fce84ac7bf08606d7
         with:
-          mysql version: '8.0'
+          mysql version: '5.7'
           mysql database: 'wordpress'
           mysql root password: 'sisipoepoe'
       - name: Install Wordpress
