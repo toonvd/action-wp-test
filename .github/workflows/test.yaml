@@ -24,10 +24,10 @@ jobs:
           extensions: pdo
       - name: Install MySQL
         uses: mirromutth/mysql-action@700bd5614a765a62bc6e286fce84ac7bf08606d7
-          with:
-            mysql version: '8.0'
-            mysql database: 'wordpress'
-            mysql root password: ''
+        with:
+          mysql version: '8.0'
+          mysql database: 'wordpress'
+          mysql root password: ''
       - name: Install Wordpress
         run: |
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
