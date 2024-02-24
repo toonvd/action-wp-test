@@ -39,5 +39,5 @@ jobs:
       - name: check dir
         run: ls
       - name: Test Curl
-        run: curl -I localhost:8000
+        run: curl -I http://127.0.0.1
       
