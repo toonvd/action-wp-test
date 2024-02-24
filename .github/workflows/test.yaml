@@ -17,13 +17,6 @@ jobs:
         uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
         with:
           ref: ${{ github.ref_name || github.base_ref }}
-      - name: Add Varnish repo
-        uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
-        with:
-          repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
-          repo-name: varnish
-          keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
-          install: varnish net-tools
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
@@ -41,12 +34,19 @@ jobs:
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
-              ./wp-cli.phar config set WP_HOME 'http://localhost:8080'
-              ./wp-cli.phar config set WP_SITEURL 'http://localhost:8080'
-              ./wp-cli.phar core install --url='http://localhost:8080' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
+              ./wp-cli.phar config set WP_HOME 'http://127.0.0.1:8080'
+              ./wp-cli.phar config set WP_SITEURL 'http://127.0.0.1:8080'
+              ./wp-cli.phar core install --url='http://127.0.0.1:8080' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
               ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
-        run:  nohup php -S localhost:8080 &
+        run:  nohup php -S 127.0.0.1:8080 &
+      - name: Add Varnish repo
+        uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
+        with:
+          repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
+          repo-name: varnish
+          keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
+          install: varnish net-tools
       - name: Test Curl
         run: curl -i localhost:6081
       
