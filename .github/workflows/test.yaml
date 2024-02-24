@@ -1,0 +1,41 @@
+name: Codequality
+on:
+  - push
+jobs:
+  harden_actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
+      - name: Ensure SHA pinned actions
+        uses: zgosalvez/github-actions-ensure-sha-pinned-actions@ba37328d4ea95eaf8b3bd6c6cef308f709a5f2ec
+  test:
+    needs: harden_actions
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
+        with:
+          ref: ${{ github.ref_name || github.base_ref }}
+      - name: Install PHP
+        uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
+        with:
+          php-version: '8.2'
+          extensions: pdo
+      - name: Install MySQL
+        uses: shogo82148/actions-setup-mysql@79d1a1da69568b6eaf8895d35e877a633f01fc5b
+        with:
+          mysql-version: "8.0"
+      - name: Create Wordpress DB
+        run: mysql -uroot -e "CREATE DATABASE wordpress;"
+      - name: Install Wordpress
+        run: |
+              wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+              chmod +x ./wp-cli.phar
+              ./wp-cli.phar core download --path=. --locale=en_US
+              ./wp-cli.phar config create --dbhost="localhost" --dbname="wordpress" --dbuser="root" --dbpass=""
+      - name: Start PHP webserver
+        run: php -S localhost:8000
+      - name: Test Curl
+        run: curl -o localhost:8000
+      
