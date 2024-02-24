@@ -24,8 +24,6 @@ jobs:
           repo-name: varnish
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
           install: varnish net-tools
-      - name: debug
-        run: sudo netstat -tulpn
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
@@ -50,5 +48,5 @@ jobs:
       - name: Start PHP webserver
         run:  nohup php -S localhost:8080 &
       - name: Test Curl
-        run: curl -i localhost:6082
+        run: curl -i localhost:6081
       
