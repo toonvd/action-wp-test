@@ -34,12 +34,12 @@ jobs:
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
-              ./wp-cli.phar config set WP_HOME 'http://127.0.0.1'
-              ./wp-cli.phar config set WP_SITEURL 'http://127.0.0.1'
+              ./wp-cli.phar config set WP_HOME 'http://localhost:8000'
+              ./wp-cli.phar config set WP_SITEURL 'http://localhost:8000'
       - name: Start PHP webserver
-        run:  nohup php -S 127.0.0.1 &> /dev/null &
+        run:  nohup php -S localhost:8000 &
       - name: check dir
         run: ls
       - name: Test Curl
-        run: curl -I http://127.0.0.1
+        run: curl -i localhost:8000
       
