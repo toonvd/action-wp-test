@@ -25,7 +25,7 @@ jobs:
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
           install: varnish net-tools
       - name: debug
-        run: netstat -tulpn
+        run: sudo netstat -tulpn
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
