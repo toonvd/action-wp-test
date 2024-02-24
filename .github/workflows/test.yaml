@@ -18,7 +18,7 @@ jobs:
         with:
           ref: ${{ github.ref_name || github.base_ref }}
       - name: Add Varnish repo
-        uses: myci-actions/add-deb-repo@<version>
+        uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
         with:
           repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
           repo-name: varnish
