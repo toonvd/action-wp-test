@@ -27,13 +27,13 @@ jobs:
         with:
           mysql version: '8.0'
           mysql database: 'wordpress'
-          mysql root password: ''
+          mysql root password: 'sisipoepoe'
       - name: Install Wordpress
         run: |
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
-              ./wp-cli.phar config create --dbhost='localhost' --dbname='wordpress' --dbuser='root' --dbpass=''
+              ./wp-cli.phar config create --dbhost='localhost' --dbname='wordpress' --dbuser='root' --dbpass='sisipoepoe'
       - name: Start PHP webserver
         run: php -S localhost:8000
       - name: Test Curl
