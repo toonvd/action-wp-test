@@ -27,7 +27,7 @@ jobs:
       - name: Check VCL
         run: cat /etc/varnish/default.vcl
       - name: start Varnish
-        run: systemctl start varnish
+        run: nohup /usr/sbin/varnishd -S /etc/varnish/secret -T localhost:6082 -f /etc/varnish/default.vcl -s malloc,256m &
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
@@ -45,12 +45,12 @@ jobs:
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
-              ./wp-cli.phar config set WP_HOME 'http://localhost:8000'
-              ./wp-cli.phar config set WP_SITEURL 'http://localhost:8000'
-              ./wp-cli.phar core install --url='http://localhost:8000' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
+              ./wp-cli.phar config set WP_HOME 'http://localhost:8080'
+              ./wp-cli.phar config set WP_SITEURL 'http://localhost:8080'
+              ./wp-cli.phar core install --url='http://localhost:8080' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
               ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
-        run:  nohup php -S localhost:8000 &
+        run:  nohup php -S localhost:8080 &
       - name: Test Curl
-        run: curl -i localhost:8000
+        run: curl -i localhost:6082
       
