@@ -37,5 +37,5 @@ jobs:
       - name: Start PHP webserver
         run:  nohup php -S localhost:8000 &> /dev/null &
       - name: Test Curl
-        run: curl -o localhost:8000
+        run: curl -I localhost:8000
       
