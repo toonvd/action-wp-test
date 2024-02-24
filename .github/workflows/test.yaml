@@ -36,6 +36,8 @@ jobs:
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
               ./wp-cli.phar config set WP_HOME 'http://localhost:8000'
               ./wp-cli.phar config set WP_SITEURL 'http://localhost:8000'
+              ./wp-cli.phar core install --url='http://localhost:8000' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
+              ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
         run:  nohup php -S localhost:8000 &
       - name: check dir
