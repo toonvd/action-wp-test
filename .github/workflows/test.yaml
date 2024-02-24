@@ -33,7 +33,7 @@ jobs:
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
               chmod +x ./wp-cli.phar
               ./wp-cli.phar core download --path=. --locale=en_US
-              ./wp-cli.phar config create --dbhost='localhost' --dbname='wordpress' --dbuser='root' --dbpass='sisipoepoe'
+              ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass='sisipoepoe'
       - name: Start PHP webserver
         run: php -S localhost:8000
       - name: Test Curl
