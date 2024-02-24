@@ -48,5 +48,5 @@ jobs:
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
           install: varnish net-tools
       - name: Test Curl
-        run: curl -i localhost:6081
+        run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
       
