@@ -27,7 +27,7 @@ jobs:
       - name: Check VCL
         run: cat /etc/varnish/default.vcl
       - name: start Varnish
-        run: nohup /usr/sbin/varnishd -S /etc/varnish/secret -T localhost:6082 -f /etc/varnish/default.vcl -s malloc,256m &
+        run: nohup /usr/sbin/varnishd -T localhost:6082 -f /etc/varnish/default.vcl -s malloc,256m &
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
