@@ -18,16 +18,12 @@ jobs:
         with:
           ref: ${{ github.ref_name || github.base_ref }}
       - name: Add Varnish repo
-        run: |
-          tee /etc/apt/sources.list.d/varnishcache_varnish70.list > /dev/null <<-EOF
-            deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
-            deb-src https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
-          EOF
-          apt-update -y
-      - name: Install Varnish
-        uses: awalsh128/cache-apt-pkgs-action@2555a377dfb0ca4763693499998da808e8d5afa0
+        uses: myci-actions/add-deb-repo@<version>
         with:
-          packages: varnish
+          repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
+          repo-name: varnish
+          keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
+          install: varnish
       - name: Install PHP
         uses: shivammathur/setup-php@6d7209f44a25a59e904b1ee9f3b0c33ab2cd888d
         with:
