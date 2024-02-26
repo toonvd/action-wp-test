@@ -61,7 +61,7 @@ jobs:
           repo-name: varnish
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
       - name: Install Varnish from cache
-        uses: awalsh128/cache-apt-pkgs-action@latest
+        uses: awalsh128/cache-apt-pkgs-action@2555a377dfb0ca4763693499998da808e8d5afa0
         with:
           packages: varnish net-tools
           version: ${{ env.apt-cache-key }}
