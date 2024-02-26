@@ -66,7 +66,7 @@ jobs:
           packages: varnish net-tools
           version: ${{ env.apt-cache-key }}
       - name: Start Varnish
-        run: sudo systemctl start varnish.service
+        run: sudo systemctl start varnish.service || journalctl -xeu varnish.service
       - name: Test Curl
         run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
       
