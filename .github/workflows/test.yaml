@@ -3,6 +3,7 @@ on:
   - push
 jobs:
   harden_actions:
+    name: Harden actions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -10,6 +11,7 @@ jobs:
       - name: Ensure SHA pinned actions
         uses: zgosalvez/github-actions-ensure-sha-pinned-actions@ba37328d4ea95eaf8b3bd6c6cef308f709a5f2ec
   test:
+    name: Install and test
     needs: harden_actions
     runs-on: ubuntu-latest
     steps:
@@ -28,7 +30,14 @@ jobs:
           mysql-version: '8.0'
       - name: Create DB
         run: mysql -uroot -e 'Create database wordpress'
-      - name: Install Wordpress
+      - name: Enable Wordpress file cache
+        id: cache-action
+        uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
+        with:
+          path: .
+          key: ${{ runner.os }}-cache-key
+      - name: Setup Wordpress files
+        if: steps.cache-action.outputs.cache-hit != 'true'
         run: |
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
               chmod +x ./wp-cli.phar
@@ -36,11 +45,13 @@ jobs:
               ./wp-cli.phar config create --dbhost='127.0.0.1' --dbname='wordpress' --dbuser='root' --dbpass=''
               ./wp-cli.phar config set WP_HOME 'http://localhost:8080'
               ./wp-cli.phar config set WP_SITEURL 'http://localhost:8080'
+      - name: Install Wordpress
+        run:  |
               ./wp-cli.phar core install --url='http://localhost:8080' --title='Varnish Cache' --admin_user='admin' --admin_password='admin' --admin_email='info@admin.fake'
               ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
         run:  nohup php -S 127.0.0.1:8080 &
-      - name: Add Varnish repo
+      - name: Setup Varnish
         uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
         with:
           repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
