@@ -33,7 +33,7 @@ jobs:
           mysql-version: '8.0'
       - name: Create DB
         run: mysql -uroot -e 'Create database wordpress'
-      - name: Enable Wordpress file cache
+      - name: Use Wordpress file cache
         id: cache-action
         uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
         with:
@@ -65,6 +65,8 @@ jobs:
         with:
           packages: varnish net-tools
           version: ${{ env.apt-cache-key }}
+      - name: Start Varnish
+        run: sudo systemctl start varnish.service
       - name: Test Curl
         run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
       
