@@ -16,7 +16,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       wordpress-cache-key: 1.0.0
-      apt-cache-key: 1.0.0
     steps:
       - name: Checkout code
         uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
@@ -60,13 +59,7 @@ jobs:
           repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
           repo-name: varnish
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
-      - name: Install Varnish from cache
-        uses: awalsh128/cache-apt-pkgs-action@2555a377dfb0ca4763693499998da808e8d5afa0
-        with:
-          packages: varnish net-tools
-          version: ${{ env.apt-cache-key }}
-      - name: Start Varnish
-        run: sudo systemctl start varnish.service || journalctl -xeu varnish.service
+          install: varnish
       - name: Test Curl
         run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
       
