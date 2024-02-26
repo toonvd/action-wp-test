@@ -53,7 +53,7 @@ jobs:
               ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
         run:  nohup php -S 127.0.0.1:8080 &
-      - name: Setup Varnish repo
+      - name: Setup Varnish
         uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
         with:
           repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
