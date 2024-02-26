@@ -14,6 +14,9 @@ jobs:
     name: Install and test
     needs: harden_actions
     runs-on: ubuntu-latest
+    env:
+      wordpress-cache-key: 1.0.0
+      apt-cache-key: 1.0.0
     steps:
       - name: Checkout code
         uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
@@ -35,7 +38,7 @@ jobs:
         uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
         with:
           path: .
-          key: ${{ runner.os }}-cache-key
+          key: ${{ env.wordpress-cache-key }}
       - name: Setup Wordpress files
         if: steps.cache-action.outputs.cache-hit != 'true'
         run: |
@@ -51,13 +54,17 @@ jobs:
               ./wp-cli.phar rewrite structure '/%postname%/'
       - name: Start PHP webserver
         run:  nohup php -S 127.0.0.1:8080 &
-      - name: Setup Varnish
+      - name: Setup Varnish repo
         uses: myci-actions/add-deb-repo@757d43d1ef9d556deafc5e98468f2931f8dd1de6
         with:
           repo: deb https://packagecloud.io/varnishcache/varnish70/ubuntu/ focal main
           repo-name: varnish
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
-          install: varnish net-tools
+      - name: Install Varnish from cache
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: varnish net-tools
+          version: ${{ env.apt-cache-key }}
       - name: Test Curl
         run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
       
