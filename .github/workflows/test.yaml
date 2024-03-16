@@ -71,21 +71,15 @@ jobs:
         if: steps.cache-batch.outputs.cache-hit != 'true'
         run: |
           branch=master
-          batstmp="$(mktemp -d bats-core-"${branch}".XXXXX)"
-          pushd "${batstmp}" &> /dev/null || return 11
           curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
           unzip -qo "${branch}".zip
-          mkdir ./bats
-          sudo bash "${batstmp}"/bats-core-"${branch}"/install.sh ./bats
-          popd &> /dev/null || return 12
+          mkdir -p ./bats/bats-support ./bats/bats-assert
+          bash ./bats-core-"${branch}"/install.sh ./bats
           curl -sSLO https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}-support".zip
           curl -sSLO https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}-assert".zip
-          mkdir -p ./bats/bats-support
-          mkdir -p ./bats/bats-assert
           unzip ${branch}-support.zip -d ./bats/bats-support
           unzip ${branch}-assert.zip -d ./bats/bats-assert
-          rm ${branch}-support.zip
-          rm ${branch}-assert.zip
+          rm -f ${branch}-support.zip ${branch}-assert.zip
       - name: Run tests
         run: ./bats/bin/bats ./tests/testAll.bats
 
