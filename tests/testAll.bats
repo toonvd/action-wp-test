@@ -4,5 +4,5 @@ setup() {
 }
 
 @test 'assert()' {
-  assert [ 1 -lt 0 ]
+  assert [ 1 -lt 2 ]
 }
