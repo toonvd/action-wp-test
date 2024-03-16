@@ -65,7 +65,7 @@ jobs:
         id: cache-bats
         uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
         with:
-          path: /usr/local/bats
+          path: ./bats
           key: ${{ env.bats-cache-key }}
       - name: Install BATS
         if: steps.cache-batch.outputs.cache-hit != 'true'
@@ -75,18 +75,18 @@ jobs:
           pushd "${batstmp}" &> /dev/null || return 11
           curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
           unzip -qo "${branch}".zip
-          mkdir -p /usr/local/bats
-          sudo bash "${batstmp}"/bats-core-"${branch}"/install.sh /usr/local/bats
+          mkdir ./bats
+          sudo bash "${batstmp}"/bats-core-"${branch}"/install.sh ./bats
           popd &> /dev/null || return 12
           curl -sSLO https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}-support".zip
           curl -sSLO https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}-assert".zip
-          mkdir -p /usr/local/bats/bats-support
-          mkdir -p /usr/local/bats/bats-assert
-          unzip ${branch}-support.zip -d /usr/local/bats/bats-support
-          unzip ${branch}-assert.zip -d /usr/local/bats/bats-assert
+          mkdir -p ./bats/bats-support
+          mkdir -p ./bats/bats-assert
+          unzip ${branch}-support.zip -d ./bats/bats-support
+          unzip ${branch}-assert.zip -d ./bats/bats-assert
           rm ${branch}-support.zip
           rm ${branch}-assert.zip
       - name: Run tests
-        run: /usr/local/bats/bin/bats ./tests/testAll.bats
+        run: ./bats/bin/bats ./tests/testAll.bats
 
       

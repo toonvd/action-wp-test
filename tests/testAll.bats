@@ -1,6 +1,6 @@
 setup() {
-      load '/usr/local/bats/bats-support/load'
-      load '/usr/local/bats/bats-assert/load'
+      load './bats/bats-support/load'
+      load './bats/bats-assert/load'
 }
 
 @test 'assert()' {
