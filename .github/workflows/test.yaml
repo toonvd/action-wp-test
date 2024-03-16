@@ -73,13 +73,12 @@ jobs:
           branch=master
           curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
           unzip -qo "${branch}".zip
-          mkdir -p ./bats/bats-support ./bats/bats-assert
+          mkdir ./bats
           bash ./bats-core-"${branch}"/install.sh ./bats
-          curl -sSL https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}".zip -o ${branch}-support.zip
-          curl -sSL https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}".zip -o ${branch}-assert.zip
-          unzip -qo ${branch}-support.zip -d ./bats/bats-support
-          unzip -qo ${branch}-assert.zip -d ./bats/bats-assert
-          rm -f ${branch}-support.zip ${branch}-assert.zip
+          curl -sSL https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}".zip -o ./bats/${branch}-support.zip
+          curl -sSL https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}".zip -o ./bats/${branch}-assert.zip
+          unzip -qo ./bats/${branch}-support.zip -d ./bats
+          unzip -qo ./bats/${branch}-assert.zip -d ./bats
       - name: Run tests
         run: ./bats/bin/bats ./tests/testAll.bats
 
