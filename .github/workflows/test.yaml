@@ -33,13 +33,13 @@ jobs:
       - name: Create DB
         run: mysql -uroot -e 'Create database wordpress'
       - name: Use Wordpress file cache
-        id: cache-action
+        id: cache-wordpress
         uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
         with:
           path: .
           key: ${{ env.wordpress-cache-key }}
       - name: Setup Wordpress files
-        if: steps.cache-action.outputs.cache-hit != 'true'
+        if: steps.cache-wordpress.outputs.cache-hit != 'true'
         run: |
               wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
               chmod +x ./wp-cli.phar
@@ -60,6 +60,31 @@ jobs:
           repo-name: varnish
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
           install: varnish
-      - name: Test Curl
-        run: "curl -i -H 'Host: localhost:8080' http://localhost:6081/"
+      - name: Use BATS cache
+                id: cache-wordpress
+                uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
+                with:
+                  path: .
+                  key: ${{ env.wordpress-cache-key }}
+      - name: Install BATS
+        run: |
+          branch=master
+          batstmp="$(mktemp -d bats-core-"${branch}".XXXXX)"
+          pushd "${batstmp}" &> /dev/null || return 11
+          curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
+          unzip -qo "${branch}".zip
+          mkdir -p /usr/local/bats
+          sudo bash "${batstmp}"/bats-core-"${branch}"/install.sh /usr/local/bats
+          popd &> /dev/null || return 12
+          curl -sSLO https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}-support".zip
+          curl -sSLO https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}-assert".zip
+          mkdir -p /usr/local/bats/bats-support
+          mkdir -p /usr/local/bats/bats-assert
+          unzip ${branch}-support.zip -d /usr/local/bats/bats-support
+          unzip ${branch}-assert.zip -d /usr/local/bats/bats-assert
+          rm ${branch}-support.zip
+          rm ${branch}-assert.zip
+      - name: Run tests
+        run: /usr/local/bats/bin/bats ./tests/testAll.bats
+
       
