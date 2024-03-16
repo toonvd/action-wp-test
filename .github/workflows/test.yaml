@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       wordpress-cache-key: 1.0.0
+      bats-cache-key: 1.0.0
     steps:
       - name: Checkout code
         uses: actions/checkout@aadec899646c8e0f34c52d9219c2faac36626b55
@@ -61,12 +62,13 @@ jobs:
           keys-asc: https://packagecloud.io/varnishcache/varnish70/gpgkey
           install: varnish
       - name: Use BATS cache
-                id: cache-wordpress
-                uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
-                with:
-                  path: .
-                  key: ${{ env.wordpress-cache-key }}
+        id: cache-bats
+        uses: actions/cache@dc88ab52d723eb4cc3a0af43f6bee825c4742280
+        with:
+          path: /usr/local/bats
+          key: ${{ env.bats-cache-key }}
       - name: Install BATS
+        if: steps.cache-batch.outputs.cache-hit != 'true'
         run: |
           branch=master
           batstmp="$(mktemp -d bats-core-"${branch}".XXXXX)"
