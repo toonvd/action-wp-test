@@ -75,8 +75,8 @@ jobs:
           unzip -qo "${branch}".zip
           mkdir -p ./bats/bats-support ./bats/bats-assert
           bash ./bats-core-"${branch}"/install.sh ./bats
-          curl -sSLO https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}-support".zip
-          curl -sSLO https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}-assert".zip
+          curl -sSLO https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}".zip -o ${branch}-support.zip
+          curl -sSLO https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}".zip -o ${branch}-assert.zip
           unzip ${branch}-support.zip -d ./bats/bats-support
           unzip ${branch}-assert.zip -d ./bats/bats-assert
           rm -f ${branch}-support.zip ${branch}-assert.zip
