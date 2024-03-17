@@ -1,4 +1,4 @@
-name: Codequality
+name: Tests
 on:
   - push
 jobs:
@@ -73,7 +73,6 @@ jobs:
           branch=master
           curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
           unzip -qo "${branch}".zip
-          mkdir ./bats
           bash ./bats-core-"${branch}"/install.sh ./bats
           curl -sSL https://github.com/bats-core/bats-support/archive/refs/heads/"${branch}".zip -o ./bats/${branch}-support.zip
           curl -sSL https://github.com/bats-core/bats-assert/archive/refs/heads/"${branch}".zip -o ./bats/${branch}-assert.zip
