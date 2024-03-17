@@ -68,7 +68,7 @@ jobs:
           path: ./bats
           key: ${{ env.bats-cache-key }}
       - name: Install BATS
-        if: steps.cache-batch.outputs.cache-hit != 'true'
+        if: steps.cache-bats.outputs.cache-hit != 'true'
         run: |
           branch=master
           curl -sSLO https://github.com/bats-core/bats-core/archive/refs/heads/"${branch}".zip
